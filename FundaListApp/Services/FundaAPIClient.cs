@@ -36,6 +36,39 @@ namespace FundaListApp.Services
             });
         }
 
+        public async Task<FundaObjectCollection> GetObjects(string type, string filter)
+        {
+            // Get 25 items at a time. The API won't return more than this in one page.
+            const int pagesize = 25;
+
+            var searchUriBase = $"?type={type}&zo={filter}";
+
+            var fundaObjects = new FundaObjectCollection();
+
+            // get pages until returned object count != pagesize, which is where you have reached the end
+            int page = 1;
+            int count;
+            do
+            {
+                var pageObjects = await GetSinglePage(searchUriBase, pagesize, page++);
+
+                // Merge the returned objects into the collection, in case there might be duplicate items 
+                // returned (due to the nature of the API, which doesn't guarantee a consistent dataset when
+                // iterating over pages). Note: duplicates are handled, missing items won't be detected.
+                foreach (var item in pageObjects)
+                {
+                    if (!fundaObjects.Contains(item.Id))
+                    {
+                        fundaObjects.Add(item);
+                    }
+                }
+
+                count = pageObjects.Count();
+            } while (count == pagesize);
+
+            return fundaObjects;
+        }
+
         public async Task<List<FundaObject>> GetSinglePage(string searchUriBase, int pagesize, int page)
         {
             try
@@ -59,7 +92,7 @@ namespace FundaListApp.Services
                 // "Request limit exceeded" in the reason.
 
                 var res = await Policy
-                    // Status codes 500, 502, 504, 503
+                    // Status codes 500, 502, 504, 503, 429
                     .HandleResult<HttpResponseMessage>(r => r.StatusCode == HttpStatusCode.InternalServerError)
                     .OrResult(r => r.StatusCode == HttpStatusCode.BadGateway)
                     .OrResult(r => r.StatusCode == HttpStatusCode.GatewayTimeout)
@@ -71,7 +104,6 @@ namespace FundaListApp.Services
                     .WaitAndRetryAsync(6, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)))
                     .ExecuteAsync(() => _client.GetAsync(pageUri));
 
-                // var res = await _client.GetAsync(pageUri);
                 res.EnsureSuccessStatusCode();
 
                 var resultString = await res.Content.ReadAsStringAsync();

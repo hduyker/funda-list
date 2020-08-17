@@ -30,13 +30,13 @@ namespace FundaListApp
             Console.WriteLine("Start retrieving information from Funda.");
             _logger.LogInformation("Start retrieving information from Funda.");
 
-            var fundaObjects = await FundaAPI.GetObjects("koop", "/amsterdam/", _client);
+            var fundaObjects = await _client.GetObjects("koop", "/amsterdam/");
 
             DisplayMakelaars("Top 10 makelaars with 'koop' objects in Amsterdam", 
                 GetTopMakelaarsByPropetiesListed(10, fundaObjects), 
                 fundaObjects.Count);
 
-            var fundaObjectsWithTuin = await FundaAPI.GetObjects("koop", "/amsterdam/tuin/", _client);
+            var fundaObjectsWithTuin = await _client.GetObjects("koop", "/amsterdam/tuin/");
 
             DisplayMakelaars("Top 10 makelaars with 'koop' objects with tuin in Amsterdam",
                 GetTopMakelaarsByPropetiesListed(10, fundaObjectsWithTuin),

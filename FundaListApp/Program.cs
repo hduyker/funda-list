@@ -1,15 +1,9 @@
-﻿using FundaListApp.Entities;
-using FundaListApp.Services;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.Authentication.ExtendedProtection;
 using System.Threading.Tasks;
 
 namespace FundaListApp
@@ -46,9 +40,6 @@ namespace FundaListApp
             Log.Information("Building service provider");
             IServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
 
-            // Print connection string to demonstrate configuration object is populated
-            Console.WriteLine(configuration.GetConnectionString("DataConnection"));
-
             try
             {
                 Log.Information("Starting application");
@@ -75,17 +66,26 @@ namespace FundaListApp
                 }))
                 .AddLogging();
 
+            const string configurationFile = "appsettings.json";
+            var basePath = Directory.GetParent(AppContext.BaseDirectory).FullName;
             // Build configuration
             try
             {
                 configuration = new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetParent(AppContext.BaseDirectory).FullName)
-                    .AddJsonFile("appsettings.json", false)
+                    .SetBasePath(basePath)
+                    .AddJsonFile(configurationFile, false)
                     .Build();
+
+                if (configuration["FundaAPIKey"].Length != 32)
+                {
+                    Console.WriteLine($"API key seems wrong in the configuration file {basePath}{configurationFile}.");
+                    throw new InvalidOperationException("API key seems incorrect.");
+                }
             }
             catch (Exception ex)
             {
-                Log.Fatal($"Cannot access configuration file: {ex}");
+                Console.WriteLine($"Cannot access the configuration file {basePath}{configurationFile}.");
+                Log.Fatal($"Cannot access configuration file {basePath}{configurationFile}: {ex}");
                 throw;
             }
     

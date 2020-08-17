@@ -109,8 +109,9 @@ This section hints at how to get the solution to work on your own workstation.
 In order to run the project, the following is needed:
 
 * .NET Core 3.1
-* Visual Studio (I used the Community edition)
 * Git
+* I used Visual Studio (Community edition) to build and debug the code, but it can be run with just .NET Core
+
 
 ## Technologies
 
@@ -119,10 +120,19 @@ The following technologies were used:
 * .NET Core 3.1
 * C#
 
-## Installation
+## Installation and running the application
 
 1. Clone the Repository: `git clone https://github.com/hduyker/funda-list.git funda-list`
-2. Run `cd funda-list`
-3. Run `start Funda.sln`
-4. Right click on the project solution name and select `Set StartUp Projects...`
-8. Select Start Without Debugging `Ctrl + F5`.
+2. `cd funda-list`
+3. Check the contents of the file `FundaListApp\appsettings.json`. You will need to put a valid API key in there. See below for a sample file.
+4. Start the console app by running `dotnet run --project FundaListApp\FundaListApp.csproj`
+
+Running the code will generate a file `FundaList-log-<date>.txt` in the current directory.
+
+Format of the `appsettings.json` file:
+```
+{
+  "FundaAPIKey": "<API KEY HERE>",
+  "FundaAPIBaseURL": "http://partnerapi.funda.nl/feeds/Aanbod.svc/json/"
+}
+```

@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace FundaListApp.Entities
 {
     public class Makelaar

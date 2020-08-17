@@ -31,7 +31,8 @@ namespace FundaListApp.Services
             {
                 LeakRate = 10,
                 LeakRateTimeSpan = TimeSpan.FromSeconds(6),
-                MaxFill = 10
+                MaxFill = 10,
+                LeakResolution = 500
             });
         }
 

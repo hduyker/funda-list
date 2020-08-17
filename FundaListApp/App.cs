@@ -43,7 +43,7 @@ namespace FundaListApp
                 GetTopMakelaarsByPropetiesListed(10, fundaObjectsWithTuin),
                 fundaObjectsWithTuin.Count);
 
-            _logger.LogInformation("Ready retrieving and displaying information from Funda.");
+            _logger.LogInformation("Done retrieving and displaying information from Funda.");
 
             Console.WriteLine("Press any key to exit.");
             Console.ReadKey();

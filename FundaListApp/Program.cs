@@ -21,7 +21,7 @@ namespace FundaListApp
         static int Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
-                .WriteTo.File("FundaList-log-{Date}.txt")
+                .WriteTo.File($"FundaList-log-{DateTime.Now:yyyy-MM-dd}.txt")
                 .CreateLogger();
 
             try
@@ -76,10 +76,19 @@ namespace FundaListApp
                 .AddLogging();
 
             // Build configuration
-             configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetParent(AppContext.BaseDirectory).FullName)
-                .AddJsonFile("appsettings.json", false)
-                .Build();
+            try
+            {
+                configuration = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetParent(AppContext.BaseDirectory).FullName)
+                    .AddJsonFile("appsettings.json", false)
+                    .Build();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal($"Cannot access configuration file: {ex}");
+                throw;
+            }
+    
 
             // Add access to generic IConfigurationRoot, add FundaAPI HTTP Client and App
             serviceCollection

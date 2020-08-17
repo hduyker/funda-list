@@ -10,7 +10,7 @@ Then do the same thing but only for objects with a tuin which are listed for sal
 For the assignment you may write a program in any object oriented language of your choice and you may use any 
 libraries that you find useful.
 
-## Initial information and thoughts
+## Initial information
 
 Useful translations:
 * koop = purchase 
@@ -27,14 +27,14 @@ Most of the parameters that you can pass are self explanatory. The parameter 'zo
 is the same as the key used in funda.nl URLs. For example the URL shown above searches for houses in Amsterdam 
 with a garden: http://www.funda.nl/koop/amsterdam/tuin/.
 
-The API can data about objects in XML format (the default) or in JSON (by inserting a 'json' slug between 
-'Aanbod.svc' and '[key]'.
+The API can return data about objects in XML format (the default) or in JSON (by inserting a 'json' slug between 
+'Aanbod.svc' and '[key]').
 
 Performing too many API requests in a short period of time (>100 per minute), the API will reject the 
 requests. The implementation should mitigate (avoid) errors and handle any errors that occur, so take 
 both into account.
 
----
+## Initial investigation
 
 To get a feel about the data (form and size), I've started with poking around on the Funda website. At the 
 time of typing this, there are [4331 koopwoningen in Amsterdam]( https://www.funda.nl/koop/amsterdam/), and 
@@ -52,6 +52,8 @@ As the endpoint is a .svc file, one thing to try out is calling it with `?single
 information given isn't called by sending it a SOAP XML message, but with something which leans towards a REST 
 API, but isn't quite that either), I instead turn to the JSON version (Chrome + JSON Formatter plugin).
 
+For the requested functionality, only a few fields are relevant: Id (to uniquely identify an Object), MakelaarId and MakelaarNaam.
+
 One thing I notice is that while you can set any page size in the request, and the `Paging` block at the end 
 reacts accordingly, the call never returns more than 25 `Objects` at a time (it will return smaller pages just 
 fine). Which means the "lazy" way of grabbing the data (do an initial call for pagesize 1, note the total amount 
@@ -63,8 +65,9 @@ losing elements or getting duplicate ones. There is the additional assumption th
 in a consistent order. Avoiding duplicates is not to hard to avoid (merge incoming datasets based on a unique key
 ), missing elements I will ignore for now.
 
-Reading over the information, another thing to keep in mind is the rate limiting and error handling on the 
-remote API call. Unfortunately, the documentation does not indicate how exactly this will manifest. 
+Reading over the information, the rate limiting and error handling on the remote API call need to be handled.
+Unfortunately, the documentation does not indicate how exactly this will manifest (i.e. how hitting the limit will
+affect subsequent requests).
 
 ## Choices
 
@@ -81,7 +84,8 @@ See: https://github.com/App-vNext/Polly
 
 Right now, the policy is injected close to the (single) call to the webservice. A cleaner way would be to 
 inject the policy at the services level, but for now this should work. (I briefly tried to get the cleaner approach
-to work, but ran out of time. Many samples explain how to do that in a web application, and this is a console app.)
+to work, but ran out of time. Many samples explain how to do that in a web application, but it's less clear how to
+implement this cleanly in a console app.)
 
 About detecting "overflow" of the allowed rate:
 
@@ -98,7 +102,7 @@ My previous experience with that was from the other side (preventing a web servi
 implemented using a reverse proxy (nginx), so that wasn't directly applicable to this situation, though I
 did recognise the pattern.
 
-The actual implementation is done with thanks to Google, it's tweaked from an implementation found at 
+The actual implementation is done (with thanks to Google) with a tweaked implementation found at 
 https://dotnetcoretutorials.com/2019/11/24/implementing-a-leaky-bucket-client-in-net-core/
 
 # Implementation

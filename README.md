@@ -68,9 +68,10 @@ remote API call. Unfortunately, the documentation does not indicate how exactly 
 
 ## Choices
 
-I will be using C# and .NET Core for this project. As .NET has good support for both XML and JSON data and 
+I will be using C# and .NET Core for this project. .NET has good support for both XML and JSON data and 
 transformations. As (for this project) I'm only interested in a small subset of the dataset, I will use the 
 JSON version of the API, to prevent building out the full object model, most of which I'm not interested in.
+In my experience this is easier with JSON.
 
 To get a better resilience to incidental issues with the availability of the Funda API webservice, I have
 investigated options. As the Polly library is part of the .NET Core environment now, I have decided to use
@@ -79,15 +80,15 @@ that library to handle transient faults, using the Retry policy.
 See: https://github.com/App-vNext/Polly 
 
 Right now, the policy is injected close to the (single) call to the webservice. A cleaner way would be to 
-inject the policy at the services level, but for now this should work. I briefly tried to get this to work,
-but ran out of time. Many samples explain how to do that in a web application, and this is a console app.
+inject the policy at the services level, but for now this should work. (I briefly tried to get the cleaner approach
+to work, but ran out of time. Many samples explain how to do that in a web application, and this is a console app.)
 
 About detecting "overflow" of the allowed rate:
 
 According to https://cloud.google.com/solutions/rate-limiting-strategies-techniques, status code 429 is used
 for "Too Many Requests" (and I've added that to the implementation), however while checking what was returned
-this does not seem to be returned. Instead, the service gives back a statuscode 401 (Unauthorized) with the text
-"Request limit exceeded" in the reason. I've added that specific case as well.
+this does not seem to be returned. Instead, the Funda API service gives back a statuscode 401 (Unauthorized) with 
+the text "Request limit exceeded" in the reason. I've added that specific case as well.
 
 To further prevent overflow, I've implemented a form of the "Leaky Bucket" or "Token Bucket" pattern.
 This hands out access tokens at a predefined rate, flattening the amount of calls to the web service.
@@ -97,7 +98,7 @@ My previous experience with that was from the other side (preventing a web servi
 implemented using a reverse proxy (nginx), so that wasn't directly applicable to this situation, though I
 did recognise the pattern.
 
-The actual implementation is with thanks to Google, it's tweaked from an implementation found at 
+The actual implementation is done with thanks to Google, it's tweaked from an implementation found at 
 https://dotnetcoretutorials.com/2019/11/24/implementing-a-leaky-bucket-client-in-net-core/
 
 # Implementation
@@ -108,7 +109,7 @@ This section hints at how to get the solution to work on your own workstation.
 
 In order to run the project, the following is needed:
 
-* .NET Core 3.1
+* .NET Core 3.1 SDK
 * Git
 * I used Visual Studio (Community edition) to build and debug the code, but it can be run with just .NET Core
 
@@ -116,9 +117,13 @@ In order to run the project, the following is needed:
 ## Technologies
 
 The following technologies were used:
-
-* .NET Core 3.1
+* .NET Core 3.1 SDK (3.1.401)
 * C#
+
+Dependencies:
+* Microsoft.Extensions.Http.Polly (3.1.7)
+* Serilog.AspNetCore (3.4.0)
+* Serilog.Sinks.File (4.1.0)
 
 ## Installation and running the application
 

@@ -127,12 +127,52 @@ The following technologies were used:
 3. Check the contents of the file `FundaListApp\appsettings.json`. You will need to put a valid API key in there. See below for a sample file.
 4. Start the console app by running `dotnet run --project FundaListApp\FundaListApp.csproj`
 
-Running the code will generate a file `FundaList-log-<date>.txt` in the current directory.
-
 Format of the `appsettings.json` file:
 ```
 {
   "FundaAPIKey": "<API KEY HERE>",
   "FundaAPIBaseURL": "http://partnerapi.funda.nl/feeds/Aanbod.svc/json/"
 }
+```
+
+Running the code (succesfully) will display the output similar to what's shown below on screen, as well generate (append to) a log
+file `FundaList-log-<date>.txt` in the current directory. If nothing gets displayed, check the log file for the possible reason.
+
+```
+Start retrieving information from Funda.
+
+Top 10 makelaars with 'koop' objects in Amsterdam
+
+  # Makelaar                                 Properties
+  1 Eefje Voogd Makelaardij                         214
+  2 Ramón Mossel Makelaardij o.g. B.V.               98
+  3 Broersma Makelaardij                             95
+  4 Hallie & Van Klooster Makelaardij                89
+  5 Hoekstra en van Eck Amsterdam West               85
+  6 Makelaardij Van der Linden Amsterdam             78
+  7 Carla van den Brink B.V.                         72
+  8 Smit & Heinen Makelaars en Taxateurs o/z         72
+  9 Heeren Makelaars                                 69
+ 10 Makelaarsland                                    67
+
+Total number of objects in selection: 3775.
+
+
+Top 10 makelaars with 'koop' objects with tuin in Amsterdam
+
+  # Makelaar                                 Properties
+  1 Broersma Makelaardij                             35
+  2 Hoekstra en van Eck Amsterdam Noord              28
+  3 Makelaardij Van der Linden Amsterdam             27
+  4 Hallie & Van Klooster Makelaardij                23
+  5 Ramón Mossel Makelaardij o.g. B.V.               20
+  6 Makelaarsland                                    19
+  7 Heeren Makelaars                                 18
+  8 Hoekstra en van Eck Amsterdam West               17
+  9 RET Makelaars - Amsterdam-Oost & IJburg          17
+ 10 Eefje Voogd Makelaardij                          16
+
+Total number of objects in selection: 862.
+
+Press any key to exit.
 ```

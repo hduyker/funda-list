@@ -84,8 +84,8 @@ namespace FundaListApp
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Cannot access the configuration file {basePath}{configurationFile}.");
-                Log.Fatal($"Cannot access configuration file {basePath}{configurationFile}: {ex}");
+                Console.WriteLine($"Cannot access the configuration file {configurationFile} at {basePath}.");
+                Log.Fatal($"Cannot access configuration file {configurationFile} at {basePath}: {ex}");
                 throw;
             }
     

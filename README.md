@@ -125,9 +125,11 @@ The following technologies were used:
 1. Clone the Repository: `git clone https://github.com/hduyker/funda-list.git funda-list`
 2. `cd funda-list`
 3. Check the contents of the file `FundaListApp\appsettings.json`. You will need to put a valid API key in there. See below for a sample file.
-4. Start the console app by running `dotnet run --project FundaListApp\FundaListApp.csproj`
+4. Depending on the system it might be necessary to put the appsettings.json  in `FundaListApp\bin\Debug\netcoreapp3.1`
+5. Similar for running the tests, they also require a valid setting file in the right folder.
+6. Start the console app by running `dotnet run --project FundaListApp\FundaListApp.csproj`
 
-Format of the `appsettings.json` file:
+Format of the `appsettings.json` file. The code will do a sanity check for the key (currently the only check if it is 32 characters in length)
 ```
 {
   "FundaAPIKey": "<API KEY HERE>",

@@ -23,7 +23,7 @@ namespace FundaListAppTests
         {
             // Arrange
             Configure();
-            var uriBase = "/amsterdam/tuin";
+            var uriBase = "?type=koop&zo=/amsterdam/tuin";
 
             // Act
             var result = _client.GetSinglePage(uriBase, 1, 1).Result;
@@ -38,7 +38,7 @@ namespace FundaListAppTests
         {
             // Arrange
             Configure();
-            var uriBase = "/amsterdam/tuin";
+            var uriBase = "?type=koop&zo=/amsterdam/tuin"; 
 
             // Act
             var result = _client.GetSinglePage(uriBase, 25, 1).Result;

@@ -75,12 +75,6 @@ namespace FundaListApp
                     .SetBasePath(basePath)
                     .AddJsonFile(configurationFile, false)
                     .Build();
-
-                if (configuration["FundaAPIKey"].Length != 32)
-                {
-                    Console.WriteLine($"API key seems wrong in the configuration file {basePath}{configurationFile}.");
-                    throw new InvalidOperationException("API key seems incorrect.");
-                }
             }
             catch (Exception ex)
             {
@@ -88,7 +82,13 @@ namespace FundaListApp
                 Log.Fatal($"Cannot access configuration file {configurationFile} at {basePath}: {ex}");
                 throw;
             }
-    
+
+            // Assumption is that the API key is always 32 characters.
+            if (configuration["FundaAPIKey"].Length != 32)
+            {
+                Console.WriteLine($"API key seems wrong in the configuration file {configurationFile} in {basePath}.");
+                throw new InvalidOperationException("API key seems incorrect.");
+            }
 
             // Add access to generic IConfigurationRoot, add FundaAPI HTTP Client and App
             serviceCollection

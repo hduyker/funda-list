@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FundaListApp;
+using System;
 using Xunit;
 
 namespace FundaListAppTests
@@ -12,7 +13,7 @@ namespace FundaListAppTests
         public void RetrieveSingleItem()
         {
             // Arrange
-            var target = new FundaApi();
+            var target = new FundaAPI();
 
             // Act
             var result = target.Query(searchType, "/amsterdam/tuin", pageSize);

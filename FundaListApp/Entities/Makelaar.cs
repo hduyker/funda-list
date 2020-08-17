@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace FundaListApp.Entities
 {
-    class Makelaar
+    public class Makelaar
     {
         public Makelaar(string makelaarNaam, int propertiesListed)
         {

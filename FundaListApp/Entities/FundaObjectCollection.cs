@@ -5,7 +5,7 @@ using System.Text;
 
 namespace FundaListApp.Entities
 {
-    class FundaObjectCollection : KeyedCollection<string, FundaObject>
+    public class FundaObjectCollection : KeyedCollection<string, FundaObject>
     {
         protected override string GetKeyForItem(FundaObject item)
         {

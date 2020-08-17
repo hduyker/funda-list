@@ -1,4 +1,5 @@
 ﻿using FundaListApp.Entities;
+using FundaListApp.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -75,12 +76,12 @@ namespace FundaListApp
                 .AddLogging();
 
             // Build configuration
-            configuration = new ConfigurationBuilder()
+             configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetParent(AppContext.BaseDirectory).FullName)
                 .AddJsonFile("appsettings.json", false)
                 .Build();
 
-            // Add access to generic IConfigurationRoot and add App
+            // Add access to generic IConfigurationRoot, add FundaAPI HTTP Client and App
             serviceCollection
                 .AddSingleton<IConfigurationRoot>(configuration)
                 .AddTransient<App>();

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FundaListApp.Entities
+﻿namespace FundaListApp.Entities
 {
-    class FundaObject
+    public class FundaObject
     {
         public string Id { get; set; }
         public int MakelaarId { get; set; }
